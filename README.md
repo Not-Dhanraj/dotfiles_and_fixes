@@ -38,7 +38,57 @@ The next time the systray applet is clicked, `gio` will use `xdg-terminal-exec` 
 - The file supports multiple entries (one per line), listed in order of preference - so if Kitty isn't found for some reason, it falls back to the next one on the list.
 - To switch terminals later, edit `~/.config/xdg-terminals.list` and replace `kitty.desktop` with another entry (e.g., `Alacritty.desktop`, `foot.desktop`, etc.).
 
-**Reference:** [CachyOS cachy-update documentation](https://github.com/CachyOS/cachy-update#run-cachy-update-in-a-specific-terminal-emulator)
+**Reference:** 
+- [CachyOS cachy-update documentation](https://github.com/CachyOS/cachy-update#run-cachy-update-in-a-specific-terminal-emulator)
 
 </details>
 
+<details>
+<summary><strong>2. Add your terminal to CachyOS tools (e.g., CachyOS Hello, limine-snapper-restore)</strong></summary>
+
+**The Issue:**
+Some CachyOS system tools, such as CachyOS Hello, `limine-snapper-restore`, and `limine-snapper-sync`, rely on a predefined list of authorized terminal emulators (e.g., `gnome-terminal`, `konsole`, `foot`). If you use a terminal that is not on this list (such as WezTerm or Ptyxis), the tools may fail to launch, making CachyOS Hello unusable or preventing snapshot restoration.
+
+**The Solution:**
+You can configure these tools to support your terminal by editing their configuration files.
+
+### For CachyOS Hello
+1. **Edit the terminal helper script:**
+   ```bash
+   sudo nano /usr/share/cachyos-hello/scripts/terminal-helper
+   ```
+2. **Add your terminal command:**
+   Locate the associative array `declare -A terminals=(` and append your terminal's launch command. For example:
+   * **WezTerm:** `["wezterm"]="wezterm start -- $cmd"`
+   * **Ptyxis:** `["ptyxis"]="ptyxis -e $cmd"`
+3. **Set the preference order:**
+   Locate the index array `declare -a term_order=(` and prepend your terminal ID (e.g., `"wezterm"` or `"ptyxis"`) to the start of the list.
+
+### For `limine-snapper-restore`
+1. **Edit the restore script:**
+   ```bash
+   sudo nano /usr/bin/limine-snapper-restore
+   ```
+2. **Add the terminal check:**
+   Locate the `get_terminal_command()` function and append your terminal to the command check chain. For example, append the following line after the existing checks:
+   ```bash
+   elif command -v ptyxis &>/dev/null; then echo ptyxis
+   ```
+
+### For `limine-snapper` / `limine-snapper-sync`
+1. **Edit the configuration file:**
+   ```bash
+   sudo nano /etc/default/limine
+   ```
+2. **Configure the terminal:**
+   Find the `Terminal=` or `TERMINAL=` line, uncomment it if necessary, and set it to your terminal ID:
+   ```ini
+   TERMINAL=wezterm
+   # or
+   Terminal=wezterm
+   ```
+
+**Reference:**
+- [Reddit Guide: Add your terminal to CachyOS tools](https://www.reddit.com/r/cachyos/comments/1rry7qh/guide_add_your_terminal_to_cachyos_tools_like/)
+
+</details>
