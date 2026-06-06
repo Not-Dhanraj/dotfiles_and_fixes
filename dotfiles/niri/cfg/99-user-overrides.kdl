@@ -1,0 +1,15 @@
+// User overrides — loaded after noctalia.kdl so noctalia-shell can't wipe them.
+// Anything here takes precedence over the auto-generated noctalia.kdl.
+
+layout {
+    focus-ring {
+        width 2
+    }
+}
+
+// Lock screen when lid closes (so GPU state is clean before suspend).
+switch-events {
+    lid-close {
+        spawn "qs" "-c" "noctalia-shell" "ipc" "call" "lockScreen" "lock"
+    }
+}

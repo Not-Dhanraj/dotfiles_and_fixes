@@ -99,6 +99,37 @@ Edit each tool's config or script to add your terminal.
 
 </details>
 
+<details>
+<summary><strong>3. Enable cursor trail effect in Kitty terminal</strong></summary>
+
+**The effect:**
+When the cursor moves, it leaves a short animated trail behind it. Built into Kitty
+since v0.38.0 — no plugins or scripts needed.
+
+**The fix:**
+Add these two lines to `~/.config/kitty/kitty.conf`:
+
+```ini
+cursor_shape beam
+cursor_trail 1
+```
+
+- `cursor_shape beam` — thin vertical bar; the most visible shape for the trail
+- `cursor_trail 1` — enables the trail; higher values (e.g. `3`) give a longer, more
+  pronounced trail
+
+**Optional tuning:**
+
+```ini
+cursor_trail_decay 0.1 0.4       # fade-in and fade-out duration in seconds
+cursor_trail_start_threshold 2   # min cells of movement before trail appears
+```
+
+**Apply without restarting:**
+Press `Ctrl+Shift+F5` to reload the config live.
+
+</details>
+
 ---
 
 ## Other Guides
@@ -106,3 +137,24 @@ Edit each tool's config or script to add your terminal.
 | Guide | Description |
 |---|---|
 | [CVAT + UFW Firewall Troubleshooting](./CVAT_UFW_Troubleshooting.md) | Fixing Docker/UFW networking conflicts that break CVAT auto-annotation with Nuclio serverless functions. Covers UFW forward policy, bridge forwarding rules, subnet allow rules, port desync, VRAM issues, and a post-reboot recovery checklist. |
+
+---
+
+## Dotfiles Backup
+
+Config backups stored in [`dotfiles/`](./dotfiles/).
+
+| Config | Source | What it is |
+|---|---|---|
+| [`dotfiles/niri/`](./dotfiles/niri/) | `~/.config/niri/` | Niri Wayland compositor — main config, noctalia theme override, and modular cfg split across `cfg/` |
+| [`dotfiles/noctalia/`](./dotfiles/noctalia/) | `~/.config/noctalia/` | Noctalia panel — settings, color palette, plugin configs, and user templates |
+| [`dotfiles/fish/`](./dotfiles/fish/) | `~/.config/fish/` | Fish shell — `config.fish`, `fish_variables`, `fish_greeting.fish`, `fcc.fish` |
+| [`dotfiles/starship/`](./dotfiles/starship/) | `~/.config/starship.toml` | Starship prompt config |
+
+To restore, copy the relevant folder back:
+
+```bash
+cp -r dotfiles/niri/* ~/.config/niri/
+
+cp -r dotfiles/noctalia/* ~/.config/noctalia/
+```

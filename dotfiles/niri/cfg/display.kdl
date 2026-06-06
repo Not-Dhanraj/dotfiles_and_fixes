@@ -1,0 +1,23 @@
+// Run `niri msg outputs` to verify output names and modes.
+// https://github.com/YaLTeR/niri/wiki/Configuration:-Outputs
+//
+// Preserved from iNiR — your current monitor setup.
+
+// Landscape monitor on the right (BenQ EX2510S)
+//output "HDMI-A-1" {
+//    mode "1920x1080@165.002"
+//    position x=3000 y=0
+//}
+
+// Portrait (vertical) monitor on the left (ViewSonic TD1655)
+// output "DP-1" {
+//     mode "1920x1080@60.000"
+//     transform "90"
+//     position x=0 y=0
+// }
+// 
+// // Laptop display in the center (AU Optronics)
+// output "eDP-2" {
+//     variable-refresh-rate
+//     position x=1080 y=0
+// }
