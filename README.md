@@ -130,6 +130,36 @@ Press `Ctrl+Shift+F5` to reload the config live.
 
 </details>
 
+<details>
+<summary><strong>4. KDE Connect blocked by UFW firewall</strong></summary>
+
+**The issue:**
+KDE Connect fails to connect to your phone even though both devices are on the same
+network. No pairing prompt appears on either side. The root cause is UFW blocking
+KDE Connect's traffic — it uses a fixed port range that must be explicitly allowed.
+
+**The fix:**
+Allow KDE Connect's port range (1714-1764) through UFW for both TCP and UDP:
+
+```bash
+sudo ufw allow 1714:1764/tcp
+sudo ufw allow 1714:1764/udp
+sudo ufw reload
+```
+
+**Verify it's working:**
+
+```bash
+sudo ufw status numbered | grep 1714
+# Should show ALLOW IN for both tcp and udp on both IPv4 and IPv6
+```
+
+**Why this range:**
+KDE Connect uses ports 1714-1764 for all communication — device discovery, file
+transfer, clipboard sync, notifications, etc. All must be open for full functionality.
+
+</details>
+
 ---
 
 ## Other Guides
@@ -157,4 +187,35 @@ To restore, copy the relevant folder back:
 cp -r dotfiles/niri/* ~/.config/niri/
 
 cp -r dotfiles/noctalia/* ~/.config/noctalia/
+
+cp -r dotfiles/fish/* ~/.config/fish/
+
+cp dotfiles/starship/starship.toml ~/.config/starship.toml
+```
+
+---
+
+## Apps & Tools
+
+A full categorized list of everything installed: → **[apps.md](./apps.md)**
+
+---
+
+## Wallpapers
+
+**Main collection — iNiR-Walls:**
+
+Clone the wallpaper pack used with this setup:
+
+```bash
+git clone https://github.com/snowarch/iNiR-Walls ~/Pictures/Wallpapers
+```
+
+**Extra wallpapers** (personal additions not in the iNiR-Walls repo) are backed up in
+[`wallpapers/extra/`](./wallpapers/extra/) — 16 images, mostly from Pexels.
+
+To restore them into the wallpapers folder:
+
+```bash
+cp wallpapers/extra/* ~/Pictures/Wallpapers/images/
 ```

@@ -157,30 +157,21 @@ sudo ufw allow out on docker0
 
 ### Step 3 - Make the rules persist across reboots
 
-The UFW runtime rules above are lost on reload. Add the equivalent iptables rules
-to `/etc/ufw/before.rules` so they survive:
+The UFW runtime rules above are stored in UFW's own database and survive `ufw reload`
+on their own. For an additional iptables-level fallback, `docker0` was also added
+to `/etc/ufw/before.rules`:
 
 ```bash
 sudo nano /etc/ufw/before.rules
 ```
 
-Find the existing `ufw-before-forward conntrack` block and add the Docker lines
+Find the existing `ufw-before-forward conntrack` block and add these two lines
 immediately after it:
 
 ```iptables
-# quickly process packets for which we already have a connection
--A ufw-before-input  -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
--A ufw-before-output -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
--A ufw-before-forward -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
-
-# Allow Docker bridge forwarding - ADD these four lines
--A ufw-before-forward -i br-84c0afa3c714 -j ACCEPT
--A ufw-before-forward -o br-84c0afa3c714 -j ACCEPT
+# Allow Docker bridge forwarding
 -A ufw-before-forward -i docker0 -j ACCEPT
 -A ufw-before-forward -o docker0 -j ACCEPT
-
-# drop INVALID packets (logs these in loglevel medium and higher)
--A ufw-before-input -m conntrack --ctstate INVALID -j ufw-logging-deny
 ```
 
 ### Step 4 - Reload UFW and restart Docker (in this order)
