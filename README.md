@@ -160,6 +160,71 @@ transfer, clipboard sync, notifications, etc. All must be open for full function
 
 </details>
 
+<details>
+<summary><strong>5. Docker GPU access fails — <code>AMD CDI spec not found</code> despite NVIDIA toolkit being installed</strong></summary>
+
+**The issue:**
+Running a GPU-enabled container with `--gpus all` throws:
+```text
+docker: Error response from daemon: AMD CDI spec not found
+```
+Despite `nvidia-ctk --version` confirming the toolkit is installed, `docker info | grep -A5 Runtimes` shows no `nvidia` runtime — only `runc` and `io.containerd.runc.v2`. The misleading "AMD" error is a red herring; the real problem is that the NVIDIA runtime was never registered with Docker.
+
+**The fix:**
+
+**Step 1 — Register the NVIDIA runtime with Docker:**
+```bash
+sudo nvidia-ctk runtime configure --runtime=docker
+```
+This writes the `nvidia` runtime entry into `/etc/docker/daemon.json`.
+
+**Step 2 — Restart Docker:**
+```bash
+sudo systemctl restart docker
+```
+
+**Step 3 — Verify:**
+```bash
+docker info | grep -A5 Runtimes
+# Expected: Runtimes: io.containerd.runc.v2 nvidia runc
+```
+
+**Step 4 — Test GPU access:**
+```bash
+docker run --rm --gpus all nvidia/cuda:12.9.0-base-ubuntu24.04 nvidia-smi
+```
+If the GPU is listed inside the container, you're done.
+
+**If the issue persists after the above steps — CDI fallback:**
+
+Check if a stale AMD CDI spec exists but no NVIDIA one:
+```bash
+ls /etc/cdi
+```
+If you see `amd.yaml` but no `nvidia.yaml`, generate one:
+```bash
+sudo nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
+```
+
+**What `/etc/docker/daemon.json` should look like after configuration:**
+```json
+{
+  "runtimes": {
+    "nvidia": {
+      "path": "nvidia-container-runtime",
+      "runtimeArgs": []
+    }
+  }
+}
+```
+
+**Notes:**
+- Installing `nvidia-container-toolkit` alone is not enough — Docker must be explicitly configured to use it.
+- Required sequence: install driver → install toolkit → `nvidia-ctk runtime configure` → restart Docker → validate.
+- For Nuclio GPU deployments, confirm `nvidia` appears in Docker runtimes before deploying with `--resource-limit nvidia.com/gpu=1`.
+
+</details>
+
 ---
 
 ## Other Guides
