@@ -1,7 +1,2 @@
-    // Export D-Bus env so tray icons register correctly (solvit's solaar etc.)
-    spawn-sh-at-startup "systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
-    spawn-sh-at-startup "systemctl --user import-environment DBUS_SESSION_BUS_ADDRESS"
-
-    spawn-sh-at-startup "qs -c noctalia-shell"
-	// niri-window-geometry daemon
-	//	spawn-sh-at-startup "python3 /home/dhanraj/.local/share/niri-window-geometry/daemon.py"
+spawn-sh-at-startup "noctalia"
+spawn-at-startup "piri" "daemon"
