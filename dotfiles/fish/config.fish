@@ -18,7 +18,16 @@ if status is-interactive
     alias q 'qs -c ii'
 end
 
-set -gx PNPM_HOME "/home/dhanraj/.local/share/pnpm"
-if not string match -q -- $PNPM_HOME $PATH
-  set -gx PATH "$PNPM_HOME" $PATH
+function postexec_newline --on-event fish_postexec
+    echo ""
 end
+
+set -Ux CHROME_EXECUTABLE /usr/bin/google-chrome-stable
+set -gx PNPM_HOME "$HOME/.local/share/pnpm"
+fish_add_path $PNPM_HOME
+fish_add_path $HOME/.local/share/pnpm/bin
+fish_add_path $HOME/.npm-global/bin
+fish_add_path $HOME/.local/bin
+
+# Added by piri installer
+fish_add_path /home/dhanraj/.local/bin

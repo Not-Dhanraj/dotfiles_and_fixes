@@ -1,0 +1,391 @@
+[audio]
+enable_overdrive = true
+enable_sounds = true
+
+[bar.default]
+background_opacity = 0.0
+capsule = true
+capsule_radius = 6
+capsule_thickness = 0.99999998137354851
+center = [ "media", "taskbar", "clock" ]
+end = [ "privacy", "tray", "group:g1", "notifications", "network", "volume", "battery", "control-center" ]
+margin_edge = 6
+margin_ends = 8
+padding = 0
+panel_overlap = 2
+radius = 6
+shadow = false
+start = [ "workspaces", "active_window" ]
+thickness = 31
+
+    [[bar.default.capsule_group]]
+    fill = "surface_variant"
+    id = "g1"
+    members = [ "network_tx", "network_rx" ]
+    opacity = 1.0
+    padding = 6.0
+    radius = 6.0
+
+[calendar]
+enabled = true
+
+    [calendar.account.personal_google]
+    color = "primary"
+    name = "dhanraj603"
+    type = "google"
+
+[config]
+
+[control_center]
+sidebar = "full"
+
+[desktop_widgets]
+schema_version = 2
+widget_order = [ "desktop-widget-0000000000000001" ]
+
+    [desktop_widgets.grid]
+    cell_size = 16
+    major_interval = 4
+    visible = true
+
+    [desktop_widgets.widget.desktop-widget-0000000000000001]
+    box_height = 272.0
+    box_width = 512.0
+    cx = 304.0
+    cy = 172.0
+    output = "eDP-2"
+    rotation = 0.0
+    type = "clock"
+
+        [desktop_widgets.widget.desktop-widget-0000000000000001.settings]
+        background = false
+        center_text = true
+        format = "%I:%M %p"
+        shadow = false
+
+[dock]
+active_monitor_only = true
+auto_hide = true
+background_opacity = 0.89999997988343239
+enabled = true
+icon_size = 44
+item_spacing = 8
+position = "right"
+radius = 12
+reserve_space = false
+shadow = false
+show_dots = true
+
+[idle]
+behavior_order = [ "lock", "screen-off", "lock-and-suspend" ]
+pre_action_fade_seconds = 0
+
+    [idle.behavior.lock]
+    action = "lock"
+    enabled = true
+    timeout = 600.0
+
+    [idle.behavior.lock-and-suspend]
+    action = "lock_and_suspend"
+    enabled = true
+    timeout = 900.0
+
+    [idle.behavior.screen-off]
+    action = "screen_off"
+    enabled = true
+    timeout = 660.0
+
+[keybinds]
+validate = [ "KP_Enter", "space", "Return" ]
+
+[location]
+auto_locate = true
+
+[lockscreen]
+blurred_desktop = true
+fingerprint = false
+
+[lockscreen_widgets]
+enabled = true
+schema_version = 2
+widget_order = [
+    "lockscreen-login-box@eDP-2",
+    "lockscreen-widget-0000000000000001",
+    "lockscreen-widget-0000000000000002",
+    "lockscreen-widget-0000000000000003",
+    "lockscreen-widget-0000000000000004"
+]
+
+    [lockscreen_widgets.grid]
+    cell_size = 16
+    major_interval = 4
+    visible = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@eDP-2"]
+    box_height = 80.0
+    box_width = 544.0
+    cx = 960.0
+    cy = 860.0
+    output = "eDP-2"
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@eDP-2".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.80000000000000004
+        background_radius = 6.0
+        input_opacity = 1.0
+        input_radius = 6.0
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_password_hint = true
+
+    [lockscreen_widgets.widget.lockscreen-widget-0000000000000001]
+    box_height = 256.0
+    box_width = 464.0
+    cx = 960.0
+    cy = 252.0
+    output = "eDP-2"
+    rotation = 0.0
+    type = "clock"
+
+        [lockscreen_widgets.widget.lockscreen-widget-0000000000000001.settings]
+        background = false
+        format = ""
+        shadow = false
+
+    [lockscreen_widgets.widget.lockscreen-widget-0000000000000002]
+    box_height = 288.0
+    box_width = 560.0
+    cx = 960.0
+    cy = 524.0
+    output = "eDP-2"
+    rotation = 0.0
+    type = "clock"
+
+        [lockscreen_widgets.widget.lockscreen-widget-0000000000000002.settings]
+        background = false
+        shadow = false
+
+    [lockscreen_widgets.widget.lockscreen-widget-0000000000000003]
+    box_height = 64.0
+    box_width = 272.0
+    cx = 960.0
+    cy = 956.0
+    output = "eDP-2"
+    rotation = 0.0
+    type = "label"
+
+        [lockscreen_widgets.widget.lockscreen-widget-0000000000000003.settings]
+        background = false
+        description = ""
+        shadow = false
+        title = "Locked!"
+
+    [lockscreen_widgets.widget.lockscreen-widget-0000000000000004]
+    box_height = 32.0
+    box_width = 256.0
+    cx = 960.0
+    cy = 1004.0
+    output = "eDP-2"
+    rotation = 0.0
+    type = "label"
+
+        [lockscreen_widgets.widget.lockscreen-widget-0000000000000004.settings]
+        background = false
+        description = "Enter Password to Unlock!!"
+        shadow = false
+        title = ""
+
+[notification]
+layer = "overlay"
+show_app_name = false
+
+[osd]
+background_opacity = 0.99999997764825821
+offset_x = 12
+offset_y = 12
+position = "top_right"
+position_vertical = "top_right"
+
+[plugins]
+enabled = []
+
+[shell]
+clipboard_confirm_clear_history = false
+corner_radius_scale = 0.55000000819563866
+font_family = "Ubuntu Nerd Font"
+niri_overview_type_to_launch_enabled = true
+polkit_agent = true
+screen_time_enabled = true
+settings_show_advanced = true
+
+    [shell.animation]
+    speed = 0.7500000111758709
+
+    [shell.launcher]
+    categories = false
+    sort_by_usage = false
+
+    [shell.panel]
+    clipboard_position = "bottom_right"
+    control_center_placement = "floating"
+    floating_offset = 2
+    open_near_click_clipboard = true
+    open_near_click_control_center = true
+    open_near_click_session = true
+    session_placement = "floating"
+    session_position = "top_right"
+    shadow = false
+    wallpaper_placement = "floating"
+    wallpaper_position = "bottom_right"
+
+    [shell.screen_corners]
+    enabled = true
+    size = 8
+
+    [shell.screenshot]
+    directory = "/home/dhanraj/Pictures/Screenshots"
+
+[system.monitor]
+cpu_poll_seconds = 5
+disk_poll_seconds = 0
+memory_poll_seconds = 10
+
+[templates]
+
+[theme]
+builtin = "Dracula"
+community_palette = "Miasma"
+mode = "dark"
+source = "wallpaper"
+
+    [theme.templates]
+    builtin_ids = [
+        "alacritty",
+        "btop",
+        "foot",
+        "gtk3",
+        "gtk4",
+        "kcolorscheme",
+        "kitty",
+        "niri",
+        "qt",
+        "scroll",
+        "starship",
+        "sway"
+    ]
+    community_ids = [ "discord", "steam", "telegram", "yazi" ]
+
+[wallpaper]
+directory = "/home/dhanraj/Pictures/aesthetic-wallpapers/images"
+transition = [ "zoom" ]
+transition_on_startup = true
+
+    [wallpaper.default]
+    path = "/home/dhanraj/Pictures/aesthetic-wallpapers/images/flower_tokyo.png"
+
+    [wallpaper.last]
+    path = "/home/dhanraj/Pictures/aesthetic-wallpapers/images/flower_tokyo.png"
+
+    [wallpaper.monitors.eDP-2]
+    path = "/home/dhanraj/Pictures/aesthetic-wallpapers/images/flower_tokyo.png"
+
+    [[wallpaper.favorite]]
+    palette_source = "wallpaper"
+    path = "/home/dhanraj/Pictures/aesthetic-wallpapers/images/flower_tokyo.png"
+    theme_mode = "dark"
+    wallpaper_scheme = "m3-content"
+
+    [[wallpaper.favorite]]
+    path = "/home/dhanraj/Pictures/aesthetic-wallpapers/images/gruvbox_retrocity.png"
+    theme_mode = "auto"
+
+    [[wallpaper.favorite]]
+    palette_source = "wallpaper"
+    path = "/home/dhanraj/Pictures/aesthetic-wallpapers/images/mecha-nostalgia.png"
+    theme_mode = "dark"
+    wallpaper_scheme = "m3-content"
+
+    [[wallpaper.favorite]]
+    palette_source = "wallpaper"
+    path = "/home/dhanraj/Pictures/aesthetic-wallpapers/images/minim.jpg"
+    theme_mode = "dark"
+    wallpaper_scheme = "m3-content"
+
+    [[wallpaper.favorite]]
+    palette_source = "wallpaper"
+    path = "/home/dhanraj/Pictures/aesthetic-wallpapers/images/minimal_nord_guy.png"
+    theme_mode = "dark"
+    wallpaper_scheme = "m3-content"
+
+    [[wallpaper.favorite]]
+    path = "/home/dhanraj/Pictures/aesthetic-wallpapers/images/nord-chainsaw.png"
+    theme_mode = "auto"
+
+    [[wallpaper.favorite]]
+    palette_source = "wallpaper"
+    path = "/home/dhanraj/Pictures/aesthetic-wallpapers/images/orange-cube.jpg"
+    theme_mode = "auto"
+    wallpaper_scheme = "m3-content"
+
+    [[wallpaper.favorite]]
+    path = "/home/dhanraj/Pictures/aesthetic-wallpapers/images/pexels-alexasfotos-33955381.jpg"
+    theme_mode = "auto"
+
+    [[wallpaper.favorite]]
+    palette_source = "wallpaper"
+    path = "/home/dhanraj/Pictures/aesthetic-wallpapers/images/ultrawide_island.png"
+    theme_mode = "auto"
+    wallpaper_scheme = "m3-content"
+
+[weather]
+refresh_minutes = 240
+
+[widget.active_window]
+max_length = 149
+
+[widget.battery]
+scale = 0.90000000000000002
+
+[widget.brightness]
+show_label = false
+
+[widget.cat]
+audio_spectrum = true
+tappy_mode = true
+type = "noctalia/bongocat:cat"
+use_mpris_filter = true
+
+[widget.clock]
+format = " %a, %-d %b • %-I:%M %p "
+
+[widget.media]
+max_length = 136
+title_scroll = "on_hover"
+
+[widget.network]
+show_label = false
+
+[widget.network_rx]
+network_speed_compact = true
+
+[widget.network_tx]
+network_speed_compact = true
+
+[widget.privacy]
+hide_inactive = true
+icon_spacing = 8
+
+[widget.taskbar]
+inactive_opacity = 0.90000000000000002
+only_active_workspace = true
+
+[widget.tray]
+detached_panel = true
+drawer = true
+drawer_columns = 4
+
+[widget.volume]
+scale = 0.95000000000000007

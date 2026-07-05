@@ -1,9 +1,0 @@
-{
-  "captureEnabled": true,
-  "evtestDevice": "/dev/input/event8",
-  "position": "bottom",
-  "marginPx": 60,
-  "hideDelaySec": 2,
-  "disabledScreens": [],
-  "useCustomColors": false
-}

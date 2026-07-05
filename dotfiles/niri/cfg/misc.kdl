@@ -1,27 +1,25 @@
-    prefer-no-csd
-    screenshot-path null
+prefer-no-csd
+screenshot-path "~/Pictures/Screenshots/screenshot-%Y%m%d-%H%M%S.png"
 
-    environment {
-        ELECTRON_OZONE_PLATFORM_HINT "auto"
-        QT_QPA_PLATFORM "wayland"
-        QT_QPA_PLATFORMTHEME "gtk3"
-        QT_WAYLAND_DISABLE_WINDOWDECORATION "1"
-        XDG_CURRENT_DESKTOP "niri"
-        XDG_SESSION_TYPE "wayland"
-    }
+environment {
+    ELECTRON_OZONE_PLATFORM_HINT "auto"
+    QT_QPA_PLATFORM            "wayland"
+    QT_QPA_PLATFORMTHEME       "gtk3"
+    QT_WAYLAND_DISABLE_WINDOWDECORATION "1"
+    XDG_CURRENT_DESKTOP        "niri"
+    XDG_SESSION_TYPE           "wayland"
+}
 
-    cursor {
-        xcursor-theme "capitaine-cursors"
-        xcursor-size 24
-    }
+cursor {
+    xcursor-theme "capitaine-cursors"
+    xcursor-size 24
+}
 
-    debug {
-        // Use NVIDIA GPU as primary render device to avoid
-        // cross-GPU artifacts on external monitors (DP-2, HDMI-A-1).
-        render-drm-device "/dev/dri/renderD128"
-        honor-xdg-activation-with-invalid-serial
-    }
+hotkey-overlay {
+    skip-at-startup
+}
 
-    hotkey-overlay {
-       skip-at-startup
-    }
+debug {
+    render-drm-device "/dev/dri/renderD128"
+    honor-xdg-activation-with-invalid-serial
+}

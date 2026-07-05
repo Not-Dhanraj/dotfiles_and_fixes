@@ -1,0 +1,38 @@
+# Piri Configuration File
+
+[niri]
+
+[piri.plugins]
+scratchpads = true
+empty = false
+window_rule = false
+singleton = false
+window_order = false
+swallow = false
+workspace_rule = false
+mark = false
+sticky = false
+
+[piri.scratchpad]
+default_size = "40% 60%"
+default_margin = 20
+
+# Kitty – slides in from the LEFT
+[scratchpads.kitty]
+direction = "fromLeft"
+command = "kitty -d ~ --class=piri.kitty -o remember_window_size=no"
+app_id = "piri.kitty"
+size = "40% 60%"
+margin = 20
+peek_pixels = 15
+peek_offset = 3
+
+# # Yazi – slides in from the RIGHT
+# [scratchpads.files]
+# direction = "fromRight"
+# command = "kitty --class=piri.yazi -o confirm_os_window_close=0 -o remember_window_size=no -e yazi"
+# app_id = "piri.yazi"
+# size = "40% 60%"
+# margin = 20
+# peek_pixels = 20
+# peek_offset = 6
