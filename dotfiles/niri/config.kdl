@@ -7,5 +7,10 @@ include "./cfg/rules.kdl"
 include "./cfg/misc.kdl"
 include "./cfg/keybinds.kdl"
 
-include "./noctalia.kdl"
 include "./cfg/99-user-overrides.kdl"
+
+// BEGIN NIRI RULES STUDIO
+include "./cfg/noctalia-rules-studio.kdl"
+// END NIRI RULES STUDIO
+
+include "noctalia.kdl"

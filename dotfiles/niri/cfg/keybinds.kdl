@@ -1,12 +1,13 @@
 binds {
-    // --- session ---
+    // session
     Mod+Tab repeat=false { toggle-overview; }
     Mod+Shift+E         { quit; }
     Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
     Mod+Shift+O         { power-off-monitors; }
 
-    // --- shell / noctalia ---
+    // shell / noctalia
     Mod+Space           { spawn-sh "noctalia msg panel-toggle launcher"; }
+    Ctrl+Space repeat=false { spawn-sh "handy-ptt toggle"; }  // toggle Handy transcription
     Mod+S               { spawn-sh "noctalia msg panel-toggle control-center"; }
     Mod+Comma           { spawn-sh "noctalia msg settings-toggle"; }
     Mod+Alt+L allow-when-locked=true { spawn-sh "noctalia msg session lock"; }
@@ -14,32 +15,33 @@ binds {
     Mod+Slash           { show-hotkey-overlay; }
     Mod+V               { spawn-sh "noctalia msg panel-toggle clipboard"; }
     Mod+B               { spawn-sh "noctalia msg panel-toggle wallpaper"; }
+    Mod+N               { spawn-sh "noctalia msg panel-toggle noctalia/notes:panel"; }
+    Mod+Shift+R         { spawn-sh "noctalia msg panel-toggle setyvii/niri-rules-studio:panel"; }
+    Mod+Shift+D         { spawn-sh "noctalia msg panel-toggle thaer99ob/default-apps:manager"; }
+    Mod+Shift+Y         { spawn-sh "noctalia msg panel-toggle aabidk20/yt-music:panel"; }
 
-    // --- screenshots ---
+    // screenshots
     Print               { screenshot; }
     Ctrl+Print          { screenshot-screen; }
     Alt+Print           { screenshot-window; }
     Mod+Shift+S         { spawn-sh "noctalia msg screenshot-region"; }
     Mod+Shift+W         { screenshot-window; }
 
-    // --- app launchers ---
+    // app launchers
     Mod+T               { spawn "kitty"; }
     Mod+Return          { spawn "kitty"; }
-    Super+E             { spawn "nautilus"; }
-    Super+W             { spawn "zen-browser"; }
+    Mod+E               { spawn "nautilus"; }
+    Mod+W               { spawn "zen-browser"; }
 
-    // --- piri scratchpads ---
-    Mod+Shift+Z         { spawn "piri" "scratchpads" "kitty" "toggle"; }
-    // Mod+X         { spawn "piri" "scratchpads" "files" "toggle"; }
-
-    // --- window management ---
+    // window management
     Mod+Q repeat=false  { close-window; }
     Mod+D               { maximize-column; }
     Mod+F               { fullscreen-window; }
+    Mod+Shift+T         { toggle-column-tabbed-display; }
     Mod+A               { toggle-window-floating; }
     Mod+Shift+V         { switch-focus-between-floating-and-tiling; }
 
-    // --- column layout ---
+    // column layout
     Mod+R               { switch-preset-column-width; }
     Mod+Ctrl+R          { reset-window-height; }
     Mod+C               { center-column; }
@@ -50,7 +52,7 @@ binds {
     Mod+BracketLeft     { consume-or-expel-window-left; }
     Mod+BracketRight    { consume-or-expel-window-right; }
 
-    // --- focus ---
+    // focus
     Mod+Left            { focus-column-left; }
     Mod+Right           { focus-column-right; }
     Mod+Up              { focus-window-up; }
@@ -62,7 +64,7 @@ binds {
     Mod+Home            { focus-column-first; }
     Mod+End             { focus-column-last; }
 
-    // --- move ---
+    // move
     Mod+Shift+Left      { move-column-left; }
     Mod+Shift+Right     { move-column-right; }
     Mod+Shift+Up        { move-window-up; }
@@ -74,17 +76,17 @@ binds {
     Mod+Ctrl+Home       { move-column-to-first; }
     Mod+Ctrl+End        { move-column-to-last; }
 
-    // --- monitors ---
+    // monitors
     Mod+Ctrl+Left       { focus-monitor-left; }
     Mod+Ctrl+Right      { focus-monitor-right; }
     Mod+Ctrl+Up         { focus-monitor-up; }
     Mod+Ctrl+Down       { focus-monitor-down; }
     Mod+Ctrl+Shift+Left { move-column-to-monitor-left; }
-    Mod+Ctrl+Shift+Right{ move-column-to-monitor-right; }
+    Mod+Ctrl+Shift+Right { move-column-to-monitor-right; }
     Mod+Ctrl+Shift+Up   { move-column-to-monitor-up; }
     Mod+Ctrl+Shift+Down { move-column-to-monitor-down; }
 
-    // --- workspaces ---
+    // workspaces
     Mod+1               { focus-workspace 1; }
     Mod+2               { focus-workspace 2; }
     Mod+3               { focus-workspace 3; }
@@ -94,6 +96,7 @@ binds {
     Mod+7               { focus-workspace 7; }
     Mod+8               { focus-workspace 8; }
     Mod+9               { focus-workspace 9; }
+    Mod+0               { focus-workspace 10; }
     Mod+Ctrl+1          { move-column-to-workspace 1; }
     Mod+Ctrl+2          { move-column-to-workspace 2; }
     Mod+Ctrl+3          { move-column-to-workspace 3; }
@@ -103,6 +106,7 @@ binds {
     Mod+Ctrl+7          { move-column-to-workspace 7; }
     Mod+Ctrl+8          { move-column-to-workspace 8; }
     Mod+Ctrl+9          { move-column-to-workspace 9; }
+    Mod+Ctrl+0          { move-column-to-workspace 10; }
 
     Mod+Page_Down       { focus-workspace-down; }
     Mod+Page_Up         { focus-workspace-up; }
@@ -110,14 +114,14 @@ binds {
     Mod+Ctrl+Page_Up    { move-column-to-workspace-up; }
 
     Mod+WheelScrollDown cooldown-ms=150 { focus-workspace-down; }
-    Mod+WheelScrollUp   cooldown-ms=150 { focus-workspace-up; }
+    Mod+WheelScrollUp cooldown-ms=150 { focus-workspace-up; }
     Mod+Ctrl+WheelScrollDown cooldown-ms=150 { move-column-to-workspace-down; }
-    Mod+Ctrl+WheelScrollUp   cooldown-ms=150 { move-column-to-workspace-up; }
+    Mod+Ctrl+WheelScrollUp cooldown-ms=150 { move-column-to-workspace-up; }
 
     Mod+WheelScrollRight { focus-column-right; }
     Mod+WheelScrollLeft  { focus-column-left; }
 
-    // --- media (hardware keys) ---
+    // media (hardware keys)
     XF86AudioRaiseVolume   { spawn-sh "noctalia msg volume-up"; }
     XF86AudioLowerVolume   { spawn-sh "noctalia msg volume-down"; }
     XF86AudioMute          { spawn-sh "noctalia msg volume-mute"; }
@@ -128,12 +132,9 @@ binds {
     XF86AudioNext          { spawn-sh "playerctl next"; }
     XF86AudioPrev          { spawn-sh "playerctl previous"; }
 
-    // --- media (keyboard shortcuts) ---
-    Ctrl+Mod+Space      { spawn-sh "playerctl play-pause"; }
+    // media (keyboard shortcuts)
     Mod+Shift+P         { spawn-sh "playerctl play-pause"; }
     Mod+Shift+N         { spawn-sh "playerctl next"; }
     Mod+Shift+B         { spawn-sh "playerctl previous"; }
-    Mod+Alt+N           { spawn-sh "playerctl next"; }
-    Mod+Alt+P           { spawn-sh "playerctl previous"; }
     Mod+Shift+M         { spawn-sh "noctalia msg volume-mute"; }
 }

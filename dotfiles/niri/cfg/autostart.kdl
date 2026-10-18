@@ -1,2 +1,1 @@
-spawn-sh-at-startup "noctalia"
-spawn-at-startup "piri" "daemon"
+spawn-at-startup "noctalia"

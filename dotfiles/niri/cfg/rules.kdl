@@ -1,17 +1,17 @@
-// global — rounded corners and clip for all windows
+// global - rounded corners and clip for all windows
 window-rule {
     geometry-corner-radius 7
     clip-to-geometry true
 }
 
-// steam — open non-main windows floating
+// steam - open non-main windows floating
 window-rule {
     match app-id="steam"
     exclude title=r"^[Ss]team$"
     open-floating true
 }
 
-// steam — notification toasts go bottom-right, unfocused
+// steam - notification toasts go bottom-right, unfocused
 window-rule {
     match app-id="steam" title=r"^notificationtoasts_\d+_desktop$"
     default-floating-position x=10 y=10 relative-to="bottom-right"
@@ -19,15 +19,46 @@ window-rule {
 }
 
 
+// KDE Connect - the daemon only ever draws transient dialogs (transfer
+// progress, pairing requests, etc.). None of them should tile.
+window-rule {
+    match app-id=r"^org\.kde\.kdeconnect\.daemon$"
+    open-floating true
+}
+
 layer-rule {
-    match namespace="^noctalia-wallpaper*"
+    match namespace="^noctalia-wallpaper"
     place-within-backdrop true
 }
 
-// disable blur behind noctalia bar panel
+// noctalia draws its own panel backgrounds, so niri blur would double up.
+// This covers every noctalia surface: bar, dock, screen-corner, desktop
+// widgets and wallpaper - not just the bar.
 layer-rule {
     match namespace="^noctalia-.*$"
     background-effect {
         blur false
     }
+}
+
+// file / folder pickers
+// Two different choosers appear depending on how the app asks for one:
+//   * xdg-desktop-portal-gnome  -> app-id "org.gnome.Nautilus", title "Open a file"
+//   * the app's own GTK3 dialog -> app-id is the PARENT app (Electron apps do this,
+window-rule {
+    match title=r"(?i)^(open|save|select|choose|import|export|upload|attach|add)\b[^--|·]*\b(file|files|folder|folders|directory|directories|image|images|video|videos|photo|photos|document|documents|location|as)\b[^--|·]*$"
+    match title=r"(?i)^(open|save|select|choose)( a| an| the)?( file| folder| directory)?( as)?[.…]*$"
+    match app-id=r"^org\.gnome\.Nautilus$" title=r"(?i)^(open|save|select|choose)\b"
+    match app-id=r"(?i)^xdg-desktop-portal"
+    match app-id=r"(?i)filechooser"
+
+    // terminals and browsers set arbitrary titles and never draw their own
+    // chooser (they go through the portal), so keep them out of the match.
+    exclude app-id=r"(?i)^(kitty|foot|alacritty|wezterm|ghostty|zen|firefox|chromium)$"
+
+    open-floating true
+
+    // same fixed size for every picker, centred (niri centres floating by default)
+    default-column-width { fixed 890; }
+    default-window-height { fixed 550; }
 }

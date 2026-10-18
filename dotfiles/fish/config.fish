@@ -24,10 +24,14 @@ end
 
 set -Ux CHROME_EXECUTABLE /usr/bin/google-chrome-stable
 set -gx PNPM_HOME "$HOME/.local/share/pnpm"
-fish_add_path $PNPM_HOME
+fish_add_path $PNPM_HOME/bin
 fish_add_path $HOME/.local/share/pnpm/bin
 fish_add_path $HOME/.npm-global/bin
 fish_add_path $HOME/.local/bin
 
-# Added by piri installer
-fish_add_path /home/dhanraj/.local/bin
+# flutter
+fish_add_path $HOME/tools/flutter/bin
+fish_add_path $HOME/.pub-cache/bin
+
+zoxide init fish | source
+
