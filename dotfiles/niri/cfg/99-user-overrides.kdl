@@ -9,3 +9,21 @@ switch-events {
         spawn "noctalia" "msg" "session" "lock"
     }
 }
+
+
+recent-windows {
+    debounce-ms 500
+    open-delay-ms 100
+
+    previews {
+        max-height 400
+        max-scale 0.6
+    }
+
+    binds {
+        Alt+Tab       { next-window; }
+        Alt+Shift+Tab { previous-window; }
+        Alt+grave     { next-window filter="app-id"; }
+    }
+}
+

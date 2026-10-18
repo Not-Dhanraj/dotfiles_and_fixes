@@ -139,7 +139,6 @@ widget_order = [
         show_caps_lock = true
         show_keyboard_layout = true
         show_login_button = true
-        show_password_hint = true
 
     [lockscreen_widgets.widget.lockscreen-widget-0000000000000001]
     box_height = 256.0
@@ -253,7 +252,7 @@ cpu_poll_seconds = 5
 disk_poll_seconds = 0
 memory_poll_seconds = 10
 
-[templates]
+
 
 [theme]
 builtin = "Dracula"
@@ -351,12 +350,6 @@ scale = 0.90000000000000002
 
 [widget.brightness]
 show_label = false
-
-[widget.cat]
-audio_spectrum = true
-tappy_mode = true
-type = "noctalia/bongocat:cat"
-use_mpris_filter = true
 
 [widget.clock]
 format = " %a, %-d %b • %-I:%M %p "

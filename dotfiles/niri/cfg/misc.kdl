@@ -3,11 +3,13 @@ screenshot-path "~/Pictures/Screenshots/screenshot-%Y%m%d-%H%M%S.png"
 
 environment {
     ELECTRON_OZONE_PLATFORM_HINT "auto"
-    QT_QPA_PLATFORM            "wayland"
-    QT_QPA_PLATFORMTHEME       "gtk3"
+    // Prefer native Wayland, but allow XWayland for Qt apps without a Wayland plugin
+    // (including the Android Emulator bundled with the Android SDK).
+    QT_QPA_PLATFORM "wayland;xcb"
+    QT_QPA_PLATFORMTHEME "gtk3"
     QT_WAYLAND_DISABLE_WINDOWDECORATION "1"
-    XDG_CURRENT_DESKTOP        "niri"
-    XDG_SESSION_TYPE           "wayland"
+    XDG_CURRENT_DESKTOP "niri"
+    XDG_SESSION_TYPE "wayland"
 }
 
 cursor {
@@ -20,6 +22,12 @@ hotkey-overlay {
 }
 
 debug {
-    render-drm-device "/dev/dri/renderD128"
+    // Composite on the AMD iGPU. Rendering on the NVIDIA dGPU breaks Electron apps
+    // (eglCreateImage EGL_BAD_MATCH -> GPU process crash-loop -> no window).
+    // by-path, not renderD12X: those numbers are assigned in probe order and can
+    // swap between the two GPUs across boots. 06:00.0 = AMD, 01:00.0 = NVIDIA.
+    // render-drm-device "/dev/dri/renderD128" -> old one "with bug i think"
+    render-drm-device "/dev/dri/by-path/pci-0000:06:00.0-render"
+    wait-for-frame-completion-before-queueing
     honor-xdg-activation-with-invalid-serial
 }
