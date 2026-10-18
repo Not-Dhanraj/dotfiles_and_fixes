@@ -1,6 +1,6 @@
-# CachyOS Issues & Fixes
+# Dotfiles & Issue fixes
 
-A personal reference of issues I ran into on CachyOS and how I fixed them - kept
+A personal dotfiles collection and reference of issues I ran into on CachyOS and how I fixed them - kept
 here so I don't have to rediscover the same solutions twice.
 
 ---
