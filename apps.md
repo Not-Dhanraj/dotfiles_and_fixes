@@ -93,6 +93,19 @@ yay -S visual-studio-code-bin antigravity-ide  android-studio
 sudo pacman -S neovim lazygit github-cli zoxide ripgrep
 ```
 
+**Required for Niri media shortcuts — [playerctl](https://github.com/altdesktop/playerctl)**
+(`playerctl`, pacman; not currently installed): controls MPRIS-compatible media players.
+The Niri bindings in `~/.config/niri/cfg/keybinds.kdl` use it for the hardware
+play/pause, next and previous keys, plus `Mod+Shift+P`, `Mod+Shift+N` and
+`Mod+Shift+B` respectively.
+
+```bash
+sudo pacman -S playerctl
+```
+
+Check available players with `playerctl -l`; the application playing media must
+expose an MPRIS interface.
+
 > [!NOTE]
 > The Neovim config in `dotfiles/nvim/` is a **LazyVim** setup. Restore with:
 > ```bash
@@ -228,6 +241,15 @@ yay -S cisco-secure-client
 
 ```bash
 flatpak install flathub com.rustdesk.RustDesk com.github.jeromerobert.pdfarranger it.mijorus.gearlever me.spaceinbox.swiftynotes com.mattjakeman.ExtensionManager
+```
+
+**Optional — [Mimic](https://flathub.org/apps/io.github.arijanj.Mimic)** (not currently
+installed): graphical manager for viewing and changing default applications and file-type
+associations.
+
+```bash
+flatpak install flathub io.github.arijanj.Mimic
+flatpak run io.github.arijanj.Mimic
 ```
 
 ---

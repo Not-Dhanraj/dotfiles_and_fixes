@@ -299,6 +299,34 @@ Working profile settings for reference:
 | `ipv6.method` | `ignore` |
 | `connection.autoconnect` | `no` |
 
+#### Noctalia hotspot plugin: keep SSID and profile in sync
+
+The `cleboost/hotspot` plugin reads its settings from the live Noctalia state file,
+`~/.local/state/noctalia/settings.toml` (the older
+`~/.config/noctalia/noctalia-config.toml` may be stale). SSIDs are case-sensitive;
+the plugin's `ssid` and the NetworkManager profile's `802-11-wireless.ssid` must match
+exactly. A mismatch can leave the old network active or create a duplicate profile when
+the plugin creates a new one.
+
+For example, to use `15ACH6` with the existing `Hotspot` profile:
+
+```bash
+noctalia config validate ~/.local/state/noctalia/settings.toml
+nmcli connection modify Hotspot 802-11-wireless.ssid 15ACH6
+nmcli -g 802-11-wireless.ssid connection show Hotspot  # should print: 15ACH6
+```
+
+Set the plugin's SSID to the same exact value in Noctalia. Keep its password and the
+NetworkManager profile's saved Wi-Fi password identical; never put the password in this
+README or share it in logs. After changing settings, restart the hotspot and connect again.
+Before deleting any duplicate profiles, inspect them with
+`nmcli -f NAME,UUID,TYPE connection show` and retain the profile matching the plugin.
+
+`noctalia config validate` may report warnings for settings belonging to unloaded plugins
+or unknown widget settings while still declaring the config valid. Review each warning
+before removing saved settings; validation warnings alone do not establish that the data is
+safe to delete.
+
 **Required package:**
 `shared` mode needs dnsmasq present. NM runs its own instance; the system
 `dnsmasq.service` should stay **inactive**.
@@ -639,6 +667,409 @@ niri msg windows | grep 'App ID: "<app-id>"'
 
 </details>
 
+<details>
+<summary><strong>8. ONLYOFFICE: oversized active border and padding around the window on niri</strong></summary>
+
+**Fixed:** 2026-10-19. Tested with `onlyoffice-bin 10.0.0-1`, `niri 26.04-1.1`,
+`xwayland-satellite 0.8.3-1.1`, and Noctalia on CachyOS.
+
+**Reapplied 2026-11-07:** the preference had returned to `titlebar=custom`. Switched
+it back to `system` after closing the empty window, removed the temporary Niri rule,
+and visually confirmed that the focus ring meets the application frame.
+
+**The issue:**
+ONLYOFFICE had a thick-looking blue active border. After removing the blue fill, a visible
+gap still separated niri's thin focus outline from the actual application frame.
+
+**Cause — custom client-side shadows, not an oversized focus ring:**
+ONLYOFFICE was running through XWayland with `titlebar=custom`. Its custom frame reserved
+transparent space for its own shadow. The live X11 window advertised:
+
+```text
+_GTK_FRAME_EXTENTS = 26, 26, 24, 28
+```
+
+These are the left, right, top, and bottom margins in pixels. Capturing the application
+surface confirmed the transparent margins. Niri's focus-colour background showed through
+them, making the border look thick. Niri's focus-ring width was already **2 px** and was
+not the cause.
+
+The problem was reported after an update, but the investigation did **not** establish
+which release introduced it; the available package log only showed installation and
+reinstallation of ONLYOFFICE 10.0.0.
+
+**The permanent fix — use ONLYOFFICE's system-title-bar mode:**
+
+1. Save all documents and fully quit ONLYOFFICE before editing its preferences. Do not
+   force-kill an instance with unsaved documents.
+2. Edit `~/.config/onlyoffice/DesktopEditors.conf`. Under the existing `[General]` section,
+   change only `titlebar=custom` to:
+
+   ```ini
+   [General]
+   titlebar=system
+   ```
+
+   Preserve all other keys and sections, including saved window geometry. Do not replace
+   the entire file with this excerpt. ONLYOFFICE also advertises the supported
+   `--system-title-bar` option in `onlyoffice-desktopeditors --help`.
+3. Reopen ONLYOFFICE normally:
+
+   ```bash
+   onlyoffice-desktopeditors
+   ```
+
+No compositor restart or re-login is needed. This disables ONLYOFFICE's custom shadow
+frame, so the active outline sits directly against the application surface.
+
+**The earlier workaround — removed after the permanent fix:**
+
+The following app-specific rule was initially added to
+`~/.config/niri/cfg/99-user-overrides.kdl`:
+
+```kdl
+window-rule {
+    match app-id=r"^ONLYOFFICE$"
+    draw-border-with-background false
+}
+```
+
+This removed the thick blue **fill**, but did **not** remove the transparent shadow
+padding. Once `titlebar=system` fixed the geometry, this rule and its explanatory comment
+were removed. Leave the normal **2 px** focus-ring setting unchanged; no special
+ONLYOFFICE border rule is required for the final configuration.
+
+**Verified result and UI tradeoff:**
+
+- Reopened the real application using the normal launcher and inspected full-display
+  screenshots of both the home screen and a presentation editor.
+- The final editor surface was `1904 × 1027`; its alpha channel was `255` everywhere,
+  confirming that no transparent outer shadow margins remained.
+- The focus outline sat directly against the window without a blue-filled gap.
+- Document tabs remained visible in the real user profile. An earlier isolated-profile
+  test had shown a blank header; that result did **not** represent the final live UI.
+- ONLYOFFICE's custom minimize/maximize/close buttons disappeared. Use niri's normal
+  window-management shortcuts instead.
+- `niri validate` passed after removing the temporary compositor rule.
+
+**Rollback:**
+Save documents and fully quit ONLYOFFICE, change the same preference back to
+`titlebar=custom`, then reopen it. This restores the custom window controls and shadow
+padding. If the blue-filled border also returns, the app-specific rule above can suppress
+the fill, but it remains only a partial workaround and will not eliminate the gap.
+
+**References:**
+
+- [niri: `draw-border-with-background`](https://github.com/niri-wm/niri/wiki/Configuration:-Window-Rules#draw-border-with-background)
+- [ONLYOFFICE: title-bar mode and thin-frame selection](https://github.com/ONLYOFFICE/desktop-apps/blob/master/win-linux/src/utils.cpp)
+- [ONLYOFFICE: custom frame margins and shadow drawing](https://github.com/ONLYOFFICE/desktop-apps/blob/master/win-linux/src/windows/platform_linux/cwindowplatform.cpp)
+
+</details>
+
+<details>
+<summary><strong>9. input-remapper preset doesn't auto-start — AUR <code>input-remapper-bin</code> never enables the service</strong></summary>
+
+**Fixed:** 2026-11-07. Tested with `input-remapper-bin 2.2.1-3`, `niri` on CachyOS (Wayland).
+
+**The issue:**
+A Razer Basilisk V3 Pro preset was set to autoload, but after login the remaps were
+inactive. They only started working after opening `input-remapper-gtk` manually.
+
+**Cause — the daemon is not running at login, not a bad preset:**
+input-remapper has two parts: a root daemon (`input-remapper-service`) that does the
+injection, and a client (`input-remapper-control` / the GUI) that asks it to load presets.
+The preset and `~/.config/input-remapper-2/config.json` were correct:
+
+```json
+"autoload": { "Razer Razer Basilisk V3 Pro": "mouse" }
+```
+
+niri does start `xdg-desktop-autostart.target` (it is `WantedBy=niri.service`), so
+`/etc/xdg/autostart/input-remapper-autoload.desktop` ran at login — but it failed because
+the daemon was down:
+
+```text
+app-input\x2dremapper\x2dautoload@autostart.service   failed
+ERROR: Service not running? The name is not activatable
+ERROR: Daemon missing
+```
+
+Why the daemon was down:
+
+1. `input-remapper.service` was **disabled** (`inactive (dead)`).
+2. The package ships no D-Bus activation file
+   (`/usr/share/dbus-1/system-services/inputremapper.Control.service`), so
+   `input-remapper-control` cannot start the daemon on demand ("not activatable").
+3. The upstream `.deb`'s `postinst` runs `systemctl enable input-remapper` and
+   `systemctl start input-remapper`, but the AUR **`input-remapper-bin` PKGBUILD only
+   extracts the files and never runs that `postinst`**. The service was therefore never
+   enabled on this machine.
+
+Opening the GUI works because it runs
+`pkexec input-remapper-control --command start-daemon`, which starts the root daemon.
+
+**Diagnose with:**
+```bash
+systemctl is-enabled input-remapper.service        # -> disabled
+systemctl --user status 'app-input\x2dremapper\x2dautoload@autostart.service' --no-pager
+journalctl -b | grep -i input-remapper | tail
+```
+
+**The fix — replicate the official postinst:**
+```bash
+# stop any daemon started manually by the GUI so the D-Bus name is free
+for p in $(pgrep -f '^python3 /usr/sbin/input-remapper-service'); do sudo kill "$p"; done
+
+# start the daemon at boot and enable it permanently
+sudo systemctl enable --now input-remapper.service
+```
+
+**Verify:**
+```bash
+systemctl status input-remapper.service --no-pager
+input-remapper-control --command autoload    # as your user, no sudo
+```
+
+Expected journal output:
+```text
+Loaded config from "/home/<user>/.config/input-remapper-2/config.json"
+Autoloading for "Razer Razer Basilisk V3 Pro"
+Loading preset from ".../presets/Razer Razer Basilisk V3 Pro/mouse.json"
+Starting injecting the preset for "Razer Razer Basilisk V3 Pro"
+kernel: input: input-remapper keyboard as /devices/virtual/input/inputXX
+```
+
+**Notes:**
+- `ERROR: Could not find ".../xmodmap.json"` is harmless on Wayland; that file is only
+  used for X11 symbol-name matching.
+- No niri `spawn-at-startup` entry is needed — niri already pulls in the XDG autostart
+  target.
+- If you reinstall `input-remapper-bin` from scratch, re-run the `systemctl enable --now`
+  step; the package does not do it for you.
+- The old failed user unit is only cosmetic; clear it with:
+  ```bash
+  systemctl --user reset-failed 'app-input\x2dremapper\x2dautoload@autostart.service'
+  ```
+
+**Reference:**
+- [input-remapper upstream (sezanzeb/input-remapper)](https://github.com/sezanzeb/input-remapper)
+
+</details>
+
+<details>
+<summary><strong>10. Opening a folder launches Kitty instead of Nautilus (niri)</strong></summary>
+
+**The issue:**
+Clicking a folder — or anything that asks the system to "open the file manager" — launched
+Kitty instead of Nautilus. Kitty itself is fine as the default *terminal*; the two settings
+are unrelated.
+
+Under niri, `inode/directory` has no explicit default handler, so GIO falls back to the first
+application registered for that MIME type — which is `kitty-open.desktop`, because kitty's URL
+launcher declares `inode/directory` in its `MimeType` list. GNOME's defaults in
+`/usr/share/applications/gnome-mimeapps.list` (`inode/directory=org.gnome.Nautilus.desktop`)
+are only honoured when `XDG_CURRENT_DESKTOP=GNOME`, so they are ignored on niri.
+
+**Diagnose:**
+```bash
+xdg-mime query default inode/directory
+# kitty-open.desktop
+
+gio mime inode/directory
+# Default application for "inode/directory": kitty-open.desktop
+```
+
+**The fix:**
+```bash
+xdg-mime default org.gnome.Nautilus.desktop inode/directory
+```
+
+**Verify:**
+```bash
+xdg-mime query default inode/directory
+# org.gnome.Nautilus.desktop
+```
+
+This appends the association to `~/.config/mimeapps.list` (no root required):
+```ini
+[Default Applications]
+inode/directory=org.gnome.Nautilus.desktop
+```
+
+**Notes:**
+- This does **not** change the default terminal. "Open in Terminal" still launches Kitty
+  through `~/.config/xdg-terminals.list` (see fix #1).
+- Reverse it anytime with:
+  ```bash
+  xdg-mime default kitty-open.desktop inode/directory
+  ```
+- `kitty-open.desktop` also registers `application/x-sh`, `application/x-shellscript`,
+  `x-scheme-handler/ssh`, `image/*`, and `text/*`. The same fallback can make those open in
+  Kitty (or another unexpected app). If that happens, set an explicit default for the type,
+  e.g.:
+  ```bash
+  xdg-mime default nvim.desktop text/plain
+  xdg-mime default org.gnome.Loupe.desktop image/png
+  ```
+
+**Reference:**
+- [XDG MIME Applications spec](https://specifications.freedesktop.org/mime-apps-spec/latest/)
+- [GLib default terminal handling (Default Terminal Spec)](https://gitlab.gnome.org/GNOME/glib/-/blob/main/gio/gdesktopappinfo.c)
+
+</details>
+
+<details>
+<summary><strong>11. Open a folder in Kitty from Nautilus</strong></summary>
+
+**The fix:**
+Install Kitty and the `nautilus-open-any-terminal` extension on CachyOS / Arch Linux:
+
+```bash
+sudo pacman -S kitty
+yay -S nautilus-open-any-terminal   # or: paru -S nautilus-open-any-terminal
+```
+
+The extension is an AUR package and pulls in `python-nautilus`. Without an AUR helper,
+see the manual installation instructions on the [AUR package page](https://aur.archlinux.org/packages/nautilus-open-any-terminal).
+
+Set Kitty as the extension's terminal and restart Nautilus so it loads the extension:
+
+```bash
+gsettings set com.github.stunkymonkey.nautilus-open-any-terminal terminal kitty
+nautilus -q
+```
+
+Reopen Nautilus and right-click a folder or an empty area inside one, then select the
+terminal entry. Kitty opens in that folder. This setting is separate from the default
+file-manager association in fix #10.
+
+If `gsettings` reports that the schema is missing, verify the extension was installed;
+the upstream settings instructions also explain how to compile the schema.
+
+**Reference:**
+- [nautilus-open-any-terminal installation and settings](https://github.com/Stunkymonkey/nautilus-open-any-terminal)
+
+</details>
+
+<details>
+<summary><strong>12. Show both monitor audio outputs in Noctalia</strong></summary>
+
+**The issue:**
+The NVIDIA HDMI audio card detected both the TD1655 touch monitor and BenQ EX2510S,
+but its default profile exposed only one output at a time. Noctalia could not list
+the BenQ while the touch monitor's profile was active.
+
+**The fix:**
+The user-level WirePlumber rule at
+`~/.config/wireplumber/wireplumber.conf.d/51-dual-hdmi.conf` matches
+`alsa_card.pci-0000_01_00.1` and loads
+`~/.config/wireplumber/hdmi-dual-profile.conf`. That profile combines the standard
+`hdmi-stereo` and `hdmi-stereo-extra1` mappings, exposing both as separate stereo
+outputs. The rule uses an absolute path to the profile; update it if the home path
+changes. The laptop speakers use a different card and are unaffected.
+
+Create `~/.config/wireplumber/hdmi-dual-profile.conf`:
+
+```ini
+[General]
+auto-profiles = yes
+
+[Mapping hdmi-stereo]
+description = Digital Stereo (HDMI)
+device-strings = hdmi:%f
+paths-output = hdmi-output-0
+channel-map = left,right
+priority = 9
+direction = output
+
+[Mapping hdmi-stereo-extra1]
+description = Digital Stereo (HDMI 2)
+device-strings = hdmi:%f,1
+paths-output = hdmi-output-1
+channel-map = left,right
+priority = 7
+direction = output
+
+[Profile dual-hdmi]
+description = Two HDMI Stereo Outputs
+output-mappings = hdmi-stereo hdmi-stereo-extra1
+priority = 10000
+```
+
+Create `~/.config/wireplumber/wireplumber.conf.d/51-dual-hdmi.conf`:
+
+```ini
+monitor.alsa.rules = [
+  {
+    matches = [ { device.name = "alsa_card.pci-0000_01_00.1" } ]
+    actions = {
+      update-props = {
+        device.profile-set = "/home/dhanraj/.config/wireplumber/hdmi-dual-profile.conf"
+        device.profile = "dual-hdmi"
+      }
+    }
+  }
+]
+```
+
+After restoring the files, restart WirePlumber before activating the profile.
+
+To activate the profile and check the outputs:
+
+```bash
+pactl set-card-profile alsa_card.pci-0000_01_00.1 dual-hdmi
+wpctl status
+```
+
+Select the desired monitor in Noctalia. The profile selection is restored by
+WirePlumber; restarting it reloads the configuration but interrupts active audio:
+
+```bash
+systemctl --user restart wireplumber
+```
+
+This mapping is specific to the current NVIDIA card and HDMI ports. If the hardware
+or connections change, check `pactl list cards` for the detected ports and profiles.
+
+**Reference:**
+- [ArchWiki: multiple sinks on the same sound card](https://wiki.archlinux.org/title/PipeWire/Troubleshooting#Simultaneous_output_to_multiple_sinks_on_the_same_sound_card)
+
+</details>
+
+---
+
+<details>
+<summary><strong>13. USB DAC detected but silent (Shanling UA1s)</strong></summary>
+
+**The issue:** The UA1s was the default PipeWire output and unmuted, but its separate ALSA playback volume at index 1 was at the minimum (0/127, -63.5 dB). Audio returned after raising it, but the setting reset on USB reconnect until the card state was saved.
+
+**Find the card and its controls:** After a reinstall, install `alsa-utils` if `aplay`, `amixer`, or `alsactl` is missing (`sudo pacman -S alsa-utils` on CachyOS/Arch). Connect the DAC first, then run:
+
+```bash
+aplay -l                  # playback cards: e.g. card 0: UA1s [Shanling UA1s]
+amixer -c UA1s controls   # list controls and their numid values
+amixer -c UA1s contents   # show values, ranges, and switches
+```
+
+In `aplay -l`, `UA1s` is the ALSA card ID, `0` is its current card number, and the bracketed text is its descriptive name. Use the ID with `-c`; card numbers can change after reconnecting. The UA1s had two playback volume controls: `numid=4` (stereo) and `numid=5` (a separate control with `index=1`). `numid` is a control number, not a card number; look it up again because IDs and controls may differ between devices or after reconnecting. Inspect a control with:
+
+```bash
+amixer -c UA1s cget numid=5
+```
+
+**Fix and persist:** With headphones off and output volume reduced, raise the quiet control to a moderate value within the range reported by `cget`, then save this card's mixer state:
+
+```bash
+amixer -c UA1s cset numid=5 80
+sudo alsactl store UA1s
+```
+
+Reconnect the DAC and test audio, gradually raising the listening volume. This machine's ALSA udev rule restores saved card state on device add; saving the UA1s state fixed the reconnect issue here. After reinstalling, check that `/usr/lib/udev/rules.d/90-alsa-restore.rules` exists; the saved state in `/var/lib/alsa/asound.state` belongs to the old installation unless restored from backup, so repeat the save step if needed. A reboot is a separate test.
+
+For another DAC, find its card ID with `aplay -l`, replace `UA1s` in the commands, and use `controls` and `contents` to identify its playback volume and mute switches. Use the `numid` and range actually reported for that card; do not assume `5` or `80` applies. Not every silent device has this extra control, so also check the selected output, application volume, and mute state.
+
+</details>
+
 ---
 
 ## Other Guides
@@ -682,29 +1113,10 @@ be blocked by accident.
 
 ## Dotfiles Backup
 
-Config backups stored in [`dotfiles/`](./dotfiles/).
-
-| Config | Source | What it is |
-|---|---|---|
-| [`dotfiles/niri/`](./dotfiles/niri/) | `~/.config/niri/` | Niri Wayland compositor — main config, noctalia theme override, and modular cfg split across `cfg/` |
-| [`dotfiles/noctalia/`](./dotfiles/noctalia/) | `~/.config/noctalia/` | Noctalia panel — settings, color palette, plugin configs, and user templates |
-| [`dotfiles/fish/`](./dotfiles/fish/) | `~/.config/fish/` | Fish shell — `config.fish`, custom functions, and greeting configuration (universal variables with credentials are intentionally excluded) |
-| [`dotfiles/starship/`](./dotfiles/starship/) | `~/.config/starship.toml` | Starship prompt config |
-| [`dotfiles/nvim/`](./dotfiles/nvim/) | `~/.config/nvim/` | Neovim — LazyVim setup, `init.lua`, `lua/config/`, `lua/plugins/`, and a pinned `lazy-lock.json` |
-
-To restore, copy the relevant folder back:
-
-```bash
-cp -r dotfiles/niri/* ~/.config/niri/
-
-cp -r dotfiles/noctalia/* ~/.config/noctalia/
-
-cp -r dotfiles/fish/* ~/.config/fish/
-
-cp dotfiles/starship/starship.toml ~/.config/starship.toml
-
-cp -r dotfiles/nvim ~/.config/nvim   # then launch `nvim` once to install plugins
-```
+The complete portable configuration snapshot is in [`dotfiles/`](./dotfiles/).
+It includes desktop, shell, terminal, editor, appearance, Noctalia live-state,
+and standalone XDG configuration files. See [`dotfiles/README.md`](./dotfiles/README.md)
+for the source mapping, restore commands, and the security-conscious exclusions.
 
 ---
 
