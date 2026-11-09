@@ -1,0 +1,391 @@
+config_version = 16
+
+[bar.default]
+center = [ "media", "workspaces", "clock" ]
+start = [ "launcher", "taskbar", "active_window" ]
+thickness = 32
+
+[[control_center.shortcuts]]
+type = "wifi"
+
+[[control_center.shortcuts]]
+type = "bluetooth"
+
+[[control_center.shortcuts]]
+type = "caffeine"
+
+[[control_center.shortcuts]]
+type = "nightlight"
+
+[[control_center.shortcuts]]
+type = "power_profile"
+
+[[control_center.shortcuts]]
+type = "cleboost/hotspot:cc-toggle"
+
+[desktop_widgets]
+schema_version = 2
+widget_order = [
+    "desktop-widget-0000000000000001",
+    "desktop-widget-0000000000000002",
+    "desktop-widget-0000000000000003",
+    "desktop-widget-0000000000000004"
+]
+
+    [desktop_widgets.grid]
+    cell_size = 16
+    major_interval = 4
+    visible = true
+
+    [desktop_widgets.widget.desktop-widget-0000000000000001]
+    box_height = 272.0
+    box_width = 512.0
+    cx = 304.0
+    cy = 172.0
+    output = "eDP-2"
+    placement_height = 0.0
+    placement_width = 0.0
+    rotation = 0.0
+    type = "clock"
+
+        [desktop_widgets.widget.desktop-widget-0000000000000001.settings]
+        background = false
+        center_text = true
+        format = "%I:%M %p"
+        shadow = false
+
+    [desktop_widgets.widget.desktop-widget-0000000000000002]
+    box_height = 288.0
+    box_width = 496.0
+    cx = 288.0
+    cy = 172.0
+    output = "HDMI-A-1"
+    placement_height = 1080.0
+    placement_width = 1920.0
+    rotation = 0.0
+    type = "clock"
+
+        [desktop_widgets.widget.desktop-widget-0000000000000002.settings]
+        background = false
+        center_text = true
+        clock_style = "digital"
+        format = "{:%I:%M %p}"
+        shadow = false
+
+    [desktop_widgets.widget.desktop-widget-0000000000000003]
+    box_height = 288.0
+    box_width = 496.0
+    cx = 280.0
+    cy = 204.0
+    output = "eDP-1"
+    placement_height = 1080.0
+    placement_width = 1920.0
+    rotation = 0.0
+    type = "clock"
+
+        [desktop_widgets.widget.desktop-widget-0000000000000003.settings]
+        background = false
+        center_text = true
+        clock_style = "digital"
+        format = "{:%I:%M %p}"
+        shadow = false
+
+    [desktop_widgets.widget.desktop-widget-0000000000000004]
+    box_height = 288.0
+    box_width = 496.0
+    cx = 268.0
+    cy = 176.0
+    output = "DP-2"
+    placement_height = 1920.0
+    placement_width = 1080.0
+    rotation = 0.0
+    type = "clock"
+
+        [desktop_widgets.widget.desktop-widget-0000000000000004.settings]
+        background = false
+        center_text = true
+        clock_style = "digital"
+        format = "{:%I:%M %p}"
+        shadow = false
+
+[dock]
+auto_hide = false
+icon_size = 40
+layer = "overlay"
+position = "bottom"
+smart_auto_hide = true
+
+[lockscreen_widgets]
+enabled = true
+schema_version = 2
+widget_order = [
+    "lockscreen-login-box@eDP-2",
+    "lockscreen-widget-0000000000000001",
+    "lockscreen-widget-0000000000000002",
+    "lockscreen-widget-0000000000000003",
+    "lockscreen-widget-0000000000000004",
+    "lockscreen-login-box@eDP-1",
+    "lockscreen-login-box@HDMI-A-1",
+    "lockscreen-login-box@DP-2"
+]
+
+    [lockscreen_widgets.grid]
+    cell_size = 16
+    major_interval = 4
+    visible = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@DP-2"]
+    box_height = 196.0
+    box_width = 810.0
+    cx = 540.0
+    cy = 1738.0
+    output = "DP-2"
+    placement_height = 1920.0
+    placement_width = 1080.0
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@DP-2".settings]
+        background_color = "surface_container"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_media = true
+        show_password_reveal = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-1"]
+    box_height = 196.0
+    box_width = 810.0
+    cx = 960.0
+    cy = 898.0
+    output = "HDMI-A-1"
+    placement_height = 1080.0
+    placement_width = 1920.0
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-1".settings]
+        background_color = "surface_container"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_media = true
+        show_password_reveal = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@eDP-1"]
+    box_height = 196.0
+    box_width = 810.0
+    cx = 960.0
+    cy = 898.0
+    output = "eDP-1"
+    placement_height = 1080.0
+    placement_width = 1920.0
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@eDP-1".settings]
+        background_color = "surface_container"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_media = true
+        show_password_reveal = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@eDP-2"]
+    box_height = 80.0
+    box_width = 544.0
+    cx = 960.0
+    cy = 860.0
+    output = "eDP-2"
+    placement_height = 0.0
+    placement_width = 0.0
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@eDP-2".settings]
+        background_color = "surface_container"
+        background_opacity = 0.80000000000000004
+        background_radius = 6.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_media = true
+        show_password_reveal = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
+
+    [lockscreen_widgets.widget.lockscreen-widget-0000000000000001]
+    box_height = 256.0
+    box_width = 464.0
+    cx = 960.0
+    cy = 252.0
+    output = "eDP-2"
+    placement_height = 0.0
+    placement_width = 0.0
+    rotation = 0.0
+    type = "clock"
+
+        [lockscreen_widgets.widget.lockscreen-widget-0000000000000001.settings]
+        background = false
+        format = ""
+        shadow = false
+
+    [lockscreen_widgets.widget.lockscreen-widget-0000000000000002]
+    box_height = 288.0
+    box_width = 560.0
+    cx = 960.0
+    cy = 524.0
+    output = "eDP-2"
+    placement_height = 0.0
+    placement_width = 0.0
+    rotation = 0.0
+    type = "clock"
+
+        [lockscreen_widgets.widget.lockscreen-widget-0000000000000002.settings]
+        background = false
+        shadow = false
+
+    [lockscreen_widgets.widget.lockscreen-widget-0000000000000003]
+    box_height = 64.0
+    box_width = 272.0
+    cx = 960.0
+    cy = 956.0
+    output = "eDP-2"
+    placement_height = 0.0
+    placement_width = 0.0
+    rotation = 0.0
+    type = "label"
+
+        [lockscreen_widgets.widget.lockscreen-widget-0000000000000003.settings]
+        background = false
+        description = ""
+        shadow = false
+        title = "Locked!"
+
+    [lockscreen_widgets.widget.lockscreen-widget-0000000000000004]
+    box_height = 32.0
+    box_width = 256.0
+    cx = 960.0
+    cy = 1004.0
+    output = "eDP-2"
+    placement_height = 0.0
+    placement_width = 0.0
+    rotation = 0.0
+    type = "label"
+
+        [lockscreen_widgets.widget.lockscreen-widget-0000000000000004.settings]
+        background = false
+        description = "Enter Password to Unlock!!"
+        shadow = false
+        title = ""
+
+[plugin_settings."cleboost/hotspot"]
+autostart = false
+panel_placement = "floating"
+panel_position = "auto"
+ssid = "15ach"
+
+[plugins]
+enabled = [ "cleboost/hotspot", "setyvii/niri-rules-studio", "noctalia/notes" ]
+
+[shell]
+avatar_path = "/mnt/linoox_extra/misc/walls/wallpaper/3d-tech.jpg"
+
+    [shell.animation]
+    speed = 0.85000001266598701
+
+[theme]
+wallpaper_scheme = "m3-tonal-spot"
+
+    [theme.templates]
+    builtin_ids = [ "alacritty", "btop", "foot", "gtk3", "gtk4", "kcolorscheme", "kitty", "niri", "qt" ]
+    community_ids = [ "telegram", "steam" ]
+
+[wallpaper]
+directory = "/mnt/linoox_extra/misc/walls"
+transition = [ "zoom" ]
+transition_on_startup = true
+
+    [wallpaper.default]
+    path = "/mnt/linoox_extra/misc/walls/Wallpapers/others/a_wooden_stairs_in_a_forest.jpg"
+
+    [wallpaper.last]
+    path = "/mnt/linoox_extra/misc/walls/Wallpapers/others/a_wooden_stairs_in_a_forest.jpg"
+
+    [wallpaper.monitors.DP-2]
+    path = "/mnt/linoox_extra/misc/walls/Wallpapers/others/a_wooden_stairs_in_a_forest.jpg"
+
+    [wallpaper.monitors.HDMI-A-1]
+    path = "/mnt/linoox_extra/misc/walls/Wallpapers/others/a_wooden_stairs_in_a_forest.jpg"
+
+    [wallpaper.monitors.eDP-1]
+    path = "/mnt/linoox_extra/misc/walls/Wallpapers/others/a_wooden_stairs_in_a_forest.jpg"
+
+    [[wallpaper.favorite]]
+    palette_source = "wallpaper"
+    path = "/mnt/linoox_extra/misc/walls/Wallpapers/nord/a_blue_and_white_dots.png"
+    theme_mode = "dark"
+    wallpaper_scheme = "m3-content"
+
+    [[wallpaper.favorite]]
+    palette_source = "wallpaper"
+    path = "/mnt/linoox_extra/misc/walls/Wallpapers/nord/a_group_of_geometric_shapes.png"
+    theme_mode = "dark"
+    wallpaper_scheme = "m3-content"
+
+    [[wallpaper.favorite]]
+    palette_source = "wallpaper"
+    path = "/mnt/linoox_extra/misc/walls/Wallpapers/nord/a_group_of_pink_flowers.png"
+    theme_mode = "dark"
+    wallpaper_scheme = "m3-tonal-spot"
+
+    [[wallpaper.favorite]]
+    palette_source = "wallpaper"
+    path = "/mnt/linoox_extra/misc/walls/Wallpapers/others/a_wooden_stairs_in_a_forest.jpg"
+    theme_mode = "dark"
+    wallpaper_scheme = "m3-tonal-spot"
+
+[widget.launcher]
+glyph = "sphere"
+
+[widget.taskbar]
+group_by_workspace = true
+hide_empty_workspaces = true
+minimal = true
+only_active_workspace = false
+workspace_group_capsule = false
+
+[widget.workspaces]
+style = "minimal"

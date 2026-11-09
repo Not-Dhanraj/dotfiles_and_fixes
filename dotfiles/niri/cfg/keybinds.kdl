@@ -6,8 +6,8 @@ binds {
     Mod+Shift+O         { power-off-monitors; }
 
     // shell / noctalia
+    Ctrl+Space repeat=false { spawn-sh "handy --toggle-transcription"; }  // toggle Handy transcription
     Mod+Space           { spawn-sh "noctalia msg panel-toggle launcher"; }
-    Ctrl+Space repeat=false { spawn-sh "handy-ptt toggle"; }  // toggle Handy transcription
     Mod+S               { spawn-sh "noctalia msg panel-toggle control-center"; }
     Mod+Comma           { spawn-sh "noctalia msg settings-toggle"; }
     Mod+Alt+L allow-when-locked=true { spawn-sh "noctalia msg session lock"; }
@@ -17,9 +17,11 @@ binds {
     Mod+B               { spawn-sh "noctalia msg panel-toggle wallpaper"; }
     Mod+N               { spawn-sh "noctalia msg panel-toggle noctalia/notes:panel"; }
     Mod+Shift+R         { spawn-sh "noctalia msg panel-toggle setyvii/niri-rules-studio:panel"; }
-    Mod+Shift+D         { spawn-sh "noctalia msg panel-toggle thaer99ob/default-apps:manager"; }
-    Mod+Shift+Y         { spawn-sh "noctalia msg panel-toggle aabidk20/yt-music:panel"; }
+    // Mod+Shift+D         { spawn-sh "noctalia msg panel-toggle thaer99ob/default-apps:manager"; }
+    // Mod+Shift+Y         { spawn-sh "noctalia msg panel-toggle aabidk20/yt-music:panel"; }
+	Mod+Shift+A 		{ spawn-sh "noctalia msg plugin alok-debnath/shelf:service all toggle"; }
 
+	
     // screenshots
     Print               { screenshot; }
     Ctrl+Print          { screenshot-screen; }

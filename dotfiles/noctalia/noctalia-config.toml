@@ -19,7 +19,6 @@ start = [ "workspaces", "active_window" ]
 thickness = 31
 
     [[bar.default.capsule_group]]
-    fill = "surface_variant"
     id = "g1"
     members = [ "network_tx", "network_rx" ]
     opacity = 1.0
@@ -271,73 +270,11 @@ source = "wallpaper"
         "kitty",
         "niri",
         "qt",
-        "scroll",
         "starship",
-        "sway"
     ]
     community_ids = [ "discord", "steam", "telegram", "yazi" ]
 
-[wallpaper]
-directory = "/home/dhanraj/Pictures/aesthetic-wallpapers/images"
-transition = [ "zoom" ]
-transition_on_startup = true
 
-    [wallpaper.default]
-    path = "/home/dhanraj/Pictures/aesthetic-wallpapers/images/flower_tokyo.png"
-
-    [wallpaper.last]
-    path = "/home/dhanraj/Pictures/aesthetic-wallpapers/images/flower_tokyo.png"
-
-    [wallpaper.monitors.eDP-2]
-    path = "/home/dhanraj/Pictures/aesthetic-wallpapers/images/flower_tokyo.png"
-
-    [[wallpaper.favorite]]
-    palette_source = "wallpaper"
-    path = "/home/dhanraj/Pictures/aesthetic-wallpapers/images/flower_tokyo.png"
-    theme_mode = "dark"
-    wallpaper_scheme = "m3-content"
-
-    [[wallpaper.favorite]]
-    path = "/home/dhanraj/Pictures/aesthetic-wallpapers/images/gruvbox_retrocity.png"
-    theme_mode = "auto"
-
-    [[wallpaper.favorite]]
-    palette_source = "wallpaper"
-    path = "/home/dhanraj/Pictures/aesthetic-wallpapers/images/mecha-nostalgia.png"
-    theme_mode = "dark"
-    wallpaper_scheme = "m3-content"
-
-    [[wallpaper.favorite]]
-    palette_source = "wallpaper"
-    path = "/home/dhanraj/Pictures/aesthetic-wallpapers/images/minim.jpg"
-    theme_mode = "dark"
-    wallpaper_scheme = "m3-content"
-
-    [[wallpaper.favorite]]
-    palette_source = "wallpaper"
-    path = "/home/dhanraj/Pictures/aesthetic-wallpapers/images/minimal_nord_guy.png"
-    theme_mode = "dark"
-    wallpaper_scheme = "m3-content"
-
-    [[wallpaper.favorite]]
-    path = "/home/dhanraj/Pictures/aesthetic-wallpapers/images/nord-chainsaw.png"
-    theme_mode = "auto"
-
-    [[wallpaper.favorite]]
-    palette_source = "wallpaper"
-    path = "/home/dhanraj/Pictures/aesthetic-wallpapers/images/orange-cube.jpg"
-    theme_mode = "auto"
-    wallpaper_scheme = "m3-content"
-
-    [[wallpaper.favorite]]
-    path = "/home/dhanraj/Pictures/aesthetic-wallpapers/images/pexels-alexasfotos-33955381.jpg"
-    theme_mode = "auto"
-
-    [[wallpaper.favorite]]
-    palette_source = "wallpaper"
-    path = "/home/dhanraj/Pictures/aesthetic-wallpapers/images/ultrawide_island.png"
-    theme_mode = "auto"
-    wallpaper_scheme = "m3-content"
 
 [weather]
 refresh_minutes = 240
